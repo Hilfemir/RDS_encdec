@@ -47,7 +47,7 @@ bool str_to_bool(string str) {
 
 /*------------------------------------------------------------*/
 
-string pad_string(string str, int length) {
+string pad_string(string str, u_int64_t length) {
 	if (str.length() > length) {
 		error(1, "String too long");
 	}

@@ -2,7 +2,6 @@
 
 using namespace std;
 
-
 class AlternativeFrequencies {
 public:
 	float f1;
