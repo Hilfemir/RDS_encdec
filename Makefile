@@ -2,11 +2,12 @@
 CXX := g++
 CXXFLAGS := -g -Wall -std=c++14
 
-# Source files
+# Directories
 SRC_PATH := ./src
 ENC_PATH := ./src/encoder
 BUILD_PATH := ./build
-#SRC := $(ENC_PATH)rds_encoder.cpp $(ENC_PATH)enc_args_parse.cpp $(SRC_PATH)utilities.cpp
+
+# Source files
 SRC := $(SRC_PATH)/utilities.cpp $(wildcard $(ENC_PATH)/*.cpp)
 
 # Object files

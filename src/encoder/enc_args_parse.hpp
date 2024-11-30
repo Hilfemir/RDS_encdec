@@ -1,11 +1,14 @@
+#ifndef ENC_ARGS_PARSE_HPP
+#define ENC_ARGS_PARSE_HPP
+
 #include <string>
 
 using namespace std;
 
 class AlternativeFrequencies {
 public:
-	float f1;
-	float f2;
+	u_int8_t f1;
+	u_int8_t f2;
 
 	/**
 	* @brief Parse the input string into two floats and store them
@@ -124,3 +127,5 @@ public:
 	 */
 	void check_duplicate(bool flag);
 };
+
+#endif //ENC_ARGS_PARSE_HPP

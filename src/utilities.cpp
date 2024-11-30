@@ -41,7 +41,7 @@ bool str_to_bool(string str) {
 	}
 	else {
 		error(1, "Invalid argument value");
-		return false; //to suppress warning
+		return false; //to suppress a warning
 	}
 }
 
@@ -53,4 +53,59 @@ string pad_string(string str, u_int64_t length) {
 	}
 
 	return str + string(length - str.length(), ' ');
+}
+
+/*------------------------------------------------------------*/
+
+string calculate_crc(string input) {
+	//x^10 + x^8 + x^7 + x^5 + x^4 + x^3 + 1
+	string generator = "00110111001";
+	int gen_length = generator.length();
+
+	//pad the input with zeros
+	string padded_input = input + string(gen_length - 1, '0');
+
+	//calculate the remainder
+	string remainder = modulo2_division(padded_input, generator);
+
+	return remainder;
+}
+
+/*------------------------------------------------------------*/
+
+string modulo2_division(string dividend, string divisor) {
+	string remainder = dividend;
+
+	//iterate over the dividend
+	for (u_int64_t i = 0; i <= remainder.length() - divisor.length(); ++i) {
+		//if the current bit is 1, perform the XOR operation
+		if (remainder[i] == '1') {
+			for (u_int64_t j = 0; j < divisor.length(); ++j) {
+				remainder[i + j] = remainder[i + j] == divisor[j] ? '0' : '1';
+			}
+		}
+	}
+
+	return remainder.substr(remainder.length() - divisor.length() + 1);
+}
+
+/*------------------------------------------------------------*/
+
+string create_checkword(string crc, string offset_type) {
+	string checkword = "";
+	map<string, string> offset_words = {
+		{"A", "0011111100"},
+		{"B", "0110011000"},
+		{"C", "0101101000"},
+		{"D", "0110110100"}
+	};
+
+	string block_offset = offset_words[offset_type];
+
+	//calculate the checkword
+	for (u_int64_t i = 0; i < crc.length(); i++) {
+		checkword += crc[i] == block_offset[i] ? '0' : '1';
+	}
+
+	return checkword;
 }

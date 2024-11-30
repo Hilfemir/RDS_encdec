@@ -14,13 +14,28 @@ void AlternativeFrequencies::parse_input(string input) {
 	string part2 = input.substr(commaPos + 1);
 
 	//convert the substrings to floats
+	float ff1;
+	float ff2;
 	try {
-		f1 = stof(part1);
-		f2 = stof(part2);
+		ff1 = stof(part1);
+		ff2 = stof(part2);
 	}
 	catch (...) {
 		error(1, "Invalid alternative frequencies format");
 	}
+
+	//check if the values are in the expected range
+	if ((ff1 < 87.6) | (ff2 < 87.6)) {
+		error(1, "The lowest allowed alternative frequency is 87.6 MHz");
+	}
+
+	if ((ff1 > 113.0) | (ff2 > 113.0)) {
+		error(1, "The highest allowed alternative frequency is 113.0 MHz");
+	}
+
+	//convert the floats to u_int8_t
+	f1 = (u_int8_t) ((ff1 * 10) - 875);
+	f2 = (u_int8_t) ((ff2 * 10) - 875);
 }
 
 /*------------------------------------------------------------*/
