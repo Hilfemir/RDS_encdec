@@ -102,7 +102,7 @@ string create_checkword(string crc, string offset_type) {
 
 	string block_offset = offset_words[offset_type];
 
-	//calculate the checkword
+	//xor the CRC with the offset word
 	for (u_int64_t i = 0; i < crc.length(); i++) {
 		checkword += crc[i] == block_offset[i] ? '0' : '1';
 	}
