@@ -86,6 +86,8 @@ public:
 	* @return value of the argument
 	*/
 	string get_arg_value(int argc, char *argv[], int &i);
+	
+	void check_regex(string input);
 };
 
 class ArgumentsCheck {

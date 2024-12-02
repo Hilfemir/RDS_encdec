@@ -1,6 +1,8 @@
 #include "enc_args_parse.hpp"
 #include "../utilities.hpp"
 
+#include <regex>
+
 void AlternativeFrequencies::parse_input(string input) {
 	size_t commaPos = input.find(','); //get index of the comma
 
@@ -145,6 +147,7 @@ void Arguments::parse_args(int argc, char *argv[]) {
 			args_check.ps = true;
 
 			string value = get_arg_value(argc, argv, i);
+			check_regex(value);
 			ps = pad_string(value, 8);
 		}
 
@@ -153,6 +156,7 @@ void Arguments::parse_args(int argc, char *argv[]) {
 			args_check.rt = true;
 
 			string value = get_arg_value(argc, argv, i);
+			check_regex(value);
 			rt = pad_string(value, 64);
 		}
 
@@ -203,7 +207,7 @@ void Arguments::print_help_and_exit() {
 	cout << "-tp <tp> - Traffic Program (0 or 1)" << endl;
 	cout << "-ms <ms> - Music/Speech (0=speech, 1=music)" << endl;
 	cout << "-ta <ta> - Traffic Announcement (0 or 1)" << endl;
-	cout << "-af <f1>,<f2> - Alternative Frequencies (float,float)" << endl;
+	cout << "-af <f1>,<f2> - Alternative Frequencies (float,float), values must be between 87.6 and 113.0" << endl;
 	cout << "-ps <ps> - Program Service (max. 8-char long string)" << endl << endl;
 
 	cout << "Group 2A-specific flags:" << endl;
@@ -243,6 +247,15 @@ string Arguments::get_arg_value(int argc, char *argv[], int &i) {
 	}
 
 	return next_arg;
+}
+
+/*------------------------------------------------------------*/
+
+void Arguments::check_regex(string input) {
+	regex pattern(R"(^[a-zA-Z0-9 ]*$)");
+	if (!regex_match(input, pattern)) {
+		error(1, "Message must contain only chars a-z, A-Z, 0-9 or spaces");
+	}
 }
 
 /*------------------------------------------------------------*/
