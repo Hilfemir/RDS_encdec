@@ -1,31 +1,27 @@
-#ifndef DEC_GROUP_0A_HPP
-#define DEC_GROUP_0A_HPP
+#ifndef DEC_GROUP_2A_HPP
+#define DEC_GROUP_2A_HPP
 
 #include <string>
 
 using namespace std;
 
-class Group0A {
+class Group2A {
 public:
 	u_int16_t pi;
 	string gt;
 	string tp;
 	u_int16_t pty;
-	string ta;
-	string ms;
-	string di;
+	string ab;
 	u_int16_t address;
-	string af;
-	string ps;
+	string rt;
 
 	//constructor
-	Group0A();
+	Group2A();
 
 	void decode(string encoded_group);
 	void decode_block0(string block);
 	void decode_block1(string block);
-	void decode_block2(string block);
-	void decode_block3(string block);
+	void decode_rt_block(string block); //blocks 2 and 3 contain the same type of info
 	void print_info();
 
 	/**
@@ -36,7 +32,7 @@ public:
 	 *
 	 * @param group the group to compare with
 	 */
-	void compare_groups(Group0A group);
+	void compare_groups(Group2A group);
 };
 
-#endif //DEC_GROUP_0A_HPP
+#endif //DEC_GROUP_2A_HPP

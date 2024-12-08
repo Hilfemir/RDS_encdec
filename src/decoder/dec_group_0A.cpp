@@ -5,6 +5,7 @@
 
 #include "dec_group_0A.hpp"
 #include "../utilities.hpp"
+#include "dec_common.hpp"
 
 using namespace std;
 
@@ -21,38 +22,9 @@ Group0A::Group0A() {
 	ps = "";
 }
 
+/*------------------------------------------------------------*/
+
 void Group0A::decode(string encoded_group) {
-	/*
-	//split the group into 4 blocks
-	list<string> blocks = split_group(encoded_group);
-
-	//the blocks may come in a mixed order
-	//in that case they will be reordered correctly
-	//and stored into this array
-	string final_blocks[4] = {"", "", "", ""};
-
-	
-	//iterate through the blocks
-	for (string block : blocks) {
-		//calculate crc to ensure the recieved data is correct,
-		//check if the block is at the right place
-		//and retrieve the correct position of the block within the group
-		int index = block_placement(block);
-
-		//check for duplicate blocks
-		if (final_blocks[index] != "") {
-			error(1, "Duplicate block detected (two blocks with the same crc)");
-		}
-		final_blocks[index] = block;
-	
-		//decode the block based on its position
-		if      (index == 0) decode_block0(block);
-		else if (index == 1) decode_block1(block);
-		else if (index == 2) decode_block2(block);
-		else if (index == 3) decode_block3(block);
-	}
-	*/
-
 	//get the correct order of blocks
 	string ordered_group[4];
 	reorder_blocks(encoded_group, ordered_group);
@@ -64,11 +36,15 @@ void Group0A::decode(string encoded_group) {
 	decode_block3(ordered_group[3]);
 }
 
+/*------------------------------------------------------------*/
+
 void Group0A::decode_block0(string block) {
 	//first block contains program identification code
 	string info = block.substr(0, 16);
 	pi = binstr_to_uint16(info);
 }
+
+/*------------------------------------------------------------*/
 
 void Group0A::decode_block1(string block) {
 	map<string, string> group_types = {
@@ -119,7 +95,14 @@ void Group0A::decode_block1(string block) {
 	//address
 	string encoded_address = info.substr(14, 2);
 	address = binstr_to_uint16(encoded_address);
+
+	//this should never happen but just in case
+	if (address > 3) {
+		error(1, "Invalid address in one of the groups");
+	}
 }
+
+/*------------------------------------------------------------*/
 
 void Group0A::decode_block2(string block) {
 	string info = block.substr(0, 16);
@@ -156,6 +139,8 @@ void Group0A::decode_block2(string block) {
 	}
 }
 
+/*------------------------------------------------------------*/
+
 void Group0A::decode_block3(string block) {
 	string info = block.substr(0, 16);
 
@@ -171,6 +156,8 @@ void Group0A::decode_block3(string block) {
 	ps = string(1, c1) + string(1, c2);
 }
 
+/*------------------------------------------------------------*/
+
 void Group0A::print_info() {
 	cout << "PI: " << pi << endl;
 	cout << "GT: " << gt << endl;
@@ -179,7 +166,32 @@ void Group0A::print_info() {
 	cout << "TA: " << ta << endl;
 	cout << "MS: " << ms << endl;
 	cout << "DI: " << di << endl;
-	cout << "Address: " << address << endl;
 	cout << "AF: " << af << endl;
 	cout << "PS: " << ps << endl;
+}
+
+/*------------------------------------------------------------*/
+
+void Group0A::compare_groups(Group0A group) {
+	if (pi != group.pi) {
+		error(1, "PI mismatch");
+	}
+	if (gt != group.gt) {
+		error(1, "GT mismatch");
+	}
+	if (tp != group.tp) {
+		error(1, "TP mismatch");
+	}
+	if (pty != group.pty) {
+		error(1, "PTY mismatch");
+	}
+	if (ta != group.ta) {
+		error(1, "TA mismatch");
+	}
+	if (ms != group.ms) {
+		error(1, "MS mismatch");
+	}
+	if (di != group.di) {
+		error(1, "DI mismatch");
+	}
 }
