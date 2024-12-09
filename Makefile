@@ -6,7 +6,8 @@ CXXFLAGS := -g -Wall -std=c++14
 SRC_PATH := ./src
 ENC_PATH := ./src/encoder
 DEC_PATH := ./src/decoder
-BUILD_PATH := ./build
+BUILD_PATH := ./obj
+BUILD_SUBDIRS := ./obj/encoder ./obj/decoder
 
 # Source files
 SRC_ENC := $(SRC_PATH)/utilities.cpp $(wildcard $(ENC_PATH)/*.cpp)
@@ -23,6 +24,13 @@ TARGET_DEC := ./rds_decoder
 # Default target
 all: $(TARGET_ENC) $(TARGET_DEC)
 
+# Rule to create the object directories if they don't exist
+$(BUILD_PATH):
+	mkdir -p $@
+
+$(BUILD_SUBDIRS):
+	mkdir -p $@
+
 # Link the object files to create the executables
 $(TARGET_ENC): $(OBJ_ENC)
 	$(CXX) $(CXXFLAGS) -o $@ $^
@@ -31,7 +39,7 @@ $(TARGET_DEC): $(OBJ_DEC)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
 # Compile source files into object files
-$(BUILD_PATH)/%.o: $(SRC_PATH)/%.cpp
+$(BUILD_PATH)/%.o: $(SRC_PATH)/%.cpp | $(BUILD_PATH) $(BUILD_SUBDIRS)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Clean up build files
