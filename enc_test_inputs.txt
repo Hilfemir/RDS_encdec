@@ -1,0 +1,60 @@
+*** GROUP 0A ***
+
+Correct Group 0A input:
+./rds_encoder -g 0A -pi 4660 -pty 5 -tp 1 -ms 0 -ta 1 -af 104.5,98.0 -ps "RadioXYZ"
+
+Correct Group 0A input with shorter message (adds padding spaces):
+./rds_encoder -g 0A -pi 4660 -pty 5 -tp 1 -ms 0 -ta 1 -af 104.5,98.0 -ps "Radio"
+
+Group 0A missing arguments:
+./rds_encoder -g 0A -pty 5 -tp 1 -ms 0 -af 104.5,98.0 -ps "RadioXYZ"
+
+Group 0A too many arguments:
+./rds_encoder -g 0A -pi 4660 -pty 5 -tp 1 -ms 0 -ta 1 -af 104.5,98.0 -ps "RadioXYZ" -ab 1
+
+Group 0A duplicate arguments (and also missing arugments :-) ):
+./rds_encoder -g 0A -g 1A -pi 4660 -tp 1 -ms 0 -ta 1 -af 104.5,98.0 -ps "RadioXYZ"
+
+Group 0A message too long:
+./rds_encoder -g 0A -pi 4660 -pty 5 -tp 1 -ms 0 -ta 1 -af 104.5,98.0 -ps "RadioABCD"
+
+Group 0A illegal characters in message:
+./rds_encoder -g 0A -pi 4660 -pty 5 -tp 1 -ms 0 -ta 1 -af 104.5,98.0 -ps "Radio_AB"
+
+Group 0A PI code out of range (negative number):
+./rds_encoder -g 0A -pi -500 -pty 5 -tp 1 -ms 0 -ta 1 -af 104.5,98.0 -ps "RadioXYZ"
+
+Group 0A PI code out of range (too large):
+./rds_encoder -g 0A -pi 65536 -pty 5 -tp 1 -ms 0 -ta 1 -af 104.5,98.0 -ps "RadioXYZ"
+
+Group 0A invalid alternative frequencies format:
+./rds_encoder -g 0A -pi 4660 -pty 5 -tp 1 -ms 0 -ta 1 -af 104.5-98.0 -ps "RadioXYZ"
+
+Group 0A alternative frequency values out of range (too low):
+./rds_encoder -g 0A -pi 4660 -pty 5 -tp 1 -ms 0 -ta 1 -af 10.0,98.0 -ps "RadioXYZ"
+
+Group 0A alternative frequency values out of range (too high):
+./rds_encoder -g 0A -pi 4660 -pty 5 -tp 1 -ms 0 -ta 1 -af 154.5,98.0 -ps "RadioXYZ"
+
+Group 0A invalid boolean flag values:
+./rds_encoder -g 0A -pi 4660 -pty 5 -tp A -ms 5 -ta 1 -af 104.5,98.0 -ps "RadioXYZ"
+
+*** GROUP 2A ***
+
+Correct Group 2A input:
+./rds_encoder -g 2A -pi 4660 -pty 5 -tp 1 -rt "Now Playing Song Title by Artist This string exactly 64bits long" -ab 0
+
+Correct Group 2A input with shorter message (adds padding spaces):
+./rds_encoder -g 2A -pi 4660 -pty 5 -tp 1 -rt "Now Playing Song Title by Artist" -ab 0
+
+Group 2A message too long:
+./rds_encoder -g 2A -pi 4660 -pty 5 -tp 1 -rt "Now Playing Song Title by Artist This string is longer than 64 bits" -ab 0
+
+Group 2A invalid -ab flag:
+./rds_encoder -g 2A -pi 4660 -pty 5 -tp 1 -rt "Now Playing Song Title by Artist" -ab 2
+
+*** OTHERS ***
+
+Invalid group:
+./rds_encoder -g 1A -pi 4660 -pty 5 -tp 1 -ms 0 -ta 1 -af 104.5,98.0 -ps "RadioXYZ"
+

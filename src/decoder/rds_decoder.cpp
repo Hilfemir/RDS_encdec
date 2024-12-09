@@ -15,6 +15,11 @@ int main(int argc, char *argv[]) {
 	string group_type = determine_group_type(input.substr(0, 104));
 
 	if (group_type == "0A") {
+		//check if the recieved string is too long
+		if (num_groups > 4) {
+			error(1, "Too many groups recieved (more than 4)");
+		}
+
 		int arr_size = 4;
 		//the message will be recieved in up to 4 parts
 		string message[arr_size] = {"", "", "", ""};
@@ -63,6 +68,11 @@ int main(int argc, char *argv[]) {
 
 
 	else if (group_type == "2A") {
+		//check if the recieved string is too long
+		if (num_groups > 16) {
+			error(1, "Too many groups recieved (more than 16)");
+		}
+
 		int arr_size = 16;
 		//the message will be recieved in up to 4 parts
 		string message[arr_size] = {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""};

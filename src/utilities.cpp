@@ -26,7 +26,7 @@ u_int16_t str_to_uint16(string str) {
 		result = static_cast<u_int16_t>(tmp);
 	}
 	catch (...) {
-		error(1, "Invalid argument value");
+		error(1, "Invalid argument value. Use --help for more information");
 	}
 
 	return result;
@@ -42,7 +42,7 @@ bool str_to_bool(string str) {
 		return false;
 	}
 	else {
-		error(1, "Invalid argument value");
+		error(1, "Invalid argument value. Use --help for more information");
 		return false; //to suppress a warning
 	}
 }
@@ -63,7 +63,7 @@ u_int16_t binstr_to_uint16(string str) {
 
 string pad_string(string str, u_int64_t length) {
 	if (str.length() > length) {
-		error(1, "String too long");
+		error(1, "Message too long");
 	}
 
 	return str + string(length - str.length(), ' ');
