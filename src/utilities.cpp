@@ -1,125 +1,132 @@
+/**
+ * @file utilities.cpp
+ * @brief Implementation of utility functions.
+ * @author Michal Blazek, BUT FIT
+ * @date 2024
+ */
+
 #include "utilities.hpp"
 
 #include <bitset>
 
 void error(int ret_code, string message) {
-	if (!message.empty()) {
-		cerr << "Error: " << message << endl;
-	}
-	exit(ret_code);
+    if (!message.empty()) {
+        cerr << "Error: " << message << endl;
+    }
+    exit(ret_code);
 }
 
 /*------------------------------------------------------------*/
 
 u_int16_t str_to_uint16(string str) {
-	u_int16_t result;
+    u_int16_t result;
 
-	try {
-		int tmp = stoi(str); //convert to standard int
+    try {
+        int tmp = stoi(str); //convert to standard int
 
-		//check if the value is in range
-		if (tmp < 0 || tmp > 65535) {
-			error(1, "Argument value out of range");
-		}
+        //check if the value is in range
+        if (tmp < 0 || tmp > 65535) {
+            error(1, "Argument value out of range");
+        }
 
-		//cast to u_int16_t
-		result = static_cast<u_int16_t>(tmp);
-	}
-	catch (...) {
-		error(1, "Invalid argument value. Use --help for more information");
-	}
+        //cast to u_int16_t
+        result = static_cast<u_int16_t>(tmp);
+    }
+    catch (...) {
+        error(1, "Invalid argument value. Use --help for more information");
+    }
 
-	return result;
+    return result;
 }
 
 /*------------------------------------------------------------*/
 
 bool str_to_bool(string str) {
-	if (str == "1") {
-		return true;
-	}
-	else if (str == "0") {
-		return false;
-	}
-	else {
-		error(1, "Invalid argument value. Use --help for more information");
-		return false; //to suppress a warning
-	}
+    if (str == "1") {
+        return true;
+    }
+    else if (str == "0") {
+        return false;
+    }
+    else {
+        error(1, "Invalid argument value. Use --help for more information");
+        return false; //to suppress a warning
+    }
 }
 
 /*------------------------------------------------------------*/
 
 u_int16_t binstr_to_uint16(string str) {
-	if (str.length() < 16) {
-		//pad the string with zeros (does not affect the value)
-		str = string(16 - str.length(), '0') + str;
-	}
+    if (str.length() < 16) {
+        //pad the string with zeros (does not affect the value)
+        str = string(16 - str.length(), '0') + str;
+    }
 
-	bitset<16> bits(str);
-	return static_cast<u_int16_t>(bits.to_ulong());
+    bitset<16> bits(str);
+    return static_cast<u_int16_t>(bits.to_ulong());
 }
 
 /*------------------------------------------------------------*/
 
 string pad_string(string str, u_int64_t length) {
-	if (str.length() > length) {
-		error(1, "Message too long");
-	}
+    if (str.length() > length) {
+        error(1, "Message too long");
+    }
 
-	return str + string(length - str.length(), ' ');
+    return str + string(length - str.length(), ' ');
 }
 
 /*------------------------------------------------------------*/
 
 string calculate_crc(string input) {
-	//x^10 + x^8 + x^7 + x^5 + x^4 + x^3 + 1
-	string generator = "00110111001";
-	int gen_length = generator.length();
+    //x^10 + x^8 + x^7 + x^5 + x^4 + x^3 + 1
+    string generator = "00110111001";
+    int gen_length = generator.length();
 
-	//pad the input with zeros
-	string padded_input = input + string(gen_length - 1, '0');
+    //pad the input with zeros
+    string padded_input = input + string(gen_length - 1, '0');
 
-	//calculate the remainder
-	string remainder = modulo2_division(padded_input, generator);
+    //calculate the remainder
+    string remainder = modulo2_division(padded_input, generator);
 
-	return remainder;
+    return remainder;
 }
 
 /*------------------------------------------------------------*/
 
 string modulo2_division(string dividend, string divisor) {
-	string remainder = dividend;
+    string remainder = dividend;
 
-	//iterate over the dividend
-	for (u_int64_t i = 0; i <= remainder.length() - divisor.length(); ++i) {
-		//if the current bit is 1, perform the XOR operation
-		if (remainder[i] == '1') {
-			for (u_int64_t j = 0; j < divisor.length(); ++j) {
-				remainder[i + j] = remainder[i + j] == divisor[j] ? '0' : '1';
-			}
-		}
-	}
+    //iterate over the dividend
+    for (u_int64_t i = 0; i <= remainder.length() - divisor.length(); ++i) {
+        //if the current bit is 1, perform the XOR operation
+        if (remainder[i] == '1') {
+            for (u_int64_t j = 0; j < divisor.length(); ++j) {
+                remainder[i + j] = remainder[i + j] == divisor[j] ? '0' : '1';
+            }
+        }
+    }
 
-	return remainder.substr(remainder.length() - divisor.length() + 1);
+    return remainder.substr(remainder.length() - divisor.length() + 1);
 }
 
 /*------------------------------------------------------------*/
 
 string create_checkword(string crc, string offset_type) {
-	string checkword = "";
-	map<string, string> offset_words = {
-		{"A", "0011111100"},
-		{"B", "0110011000"},
-		{"C", "0101101000"},
-		{"D", "0110110100"}
-	};
+    string checkword = "";
+    map<string, string> offset_words = {
+        {"A", "0011111100"},
+        {"B", "0110011000"},
+        {"C", "0101101000"},
+        {"D", "0110110100"}
+    };
 
-	string block_offset = offset_words[offset_type];
+    string block_offset = offset_words[offset_type];
 
-	//xor the CRC with the offset word
-	for (u_int64_t i = 0; i < crc.length(); i++) {
-		checkword += crc[i] == block_offset[i] ? '0' : '1';
-	}
+    //xor the CRC with the offset word
+    for (u_int64_t i = 0; i < crc.length(); i++) {
+        checkword += crc[i] == block_offset[i] ? '0' : '1';
+    }
 
-	return checkword;
+    return checkword;
 }

@@ -1,3 +1,10 @@
+/**
+ * @file dec_args_parse.hpp
+ * @brief Header file for the argument parsing functions for the decoder.
+ * @author Michal Blazek, BUT FIT
+ * @date 2024
+ */
+
 #include <string>
 
 using namespace std;
