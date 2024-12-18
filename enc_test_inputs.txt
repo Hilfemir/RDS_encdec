@@ -28,7 +28,7 @@ Group 0A PI code out of range (too large):
 ./rds_encoder -g 0A -pi 65536 -pty 5 -tp 1 -ms 0 -ta 1 -af 104.5,98.0 -ps "RadioXYZ"
 
 Group 0A invalid alternative frequencies format:
-./rds_encoder -g 0A -pi 4660 -pty 5 -tp 1 -ms 0 -ta 1 -af 104.5-98.0 -ps "RadioXYZ"
+./rds_encoder -g 0A -pi 4660 -pty 5 -tp 1 -ms 0 -ta 1 -af 98.5-104.5 -ps "RadioXYZ"
 
 Group 0A alternative frequency values out of range (too low):
 ./rds_encoder -g 0A -pi 4660 -pty 5 -tp 1 -ms 0 -ta 1 -af 10.0,98.0 -ps "RadioXYZ"

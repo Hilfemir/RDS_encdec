@@ -200,7 +200,7 @@ void Arguments::print_help_and_exit() {
 	cout << "-g <g> - RDS Group (either '0A' or '2A')" << endl << endl;
 
 	cout << "Common flags for both groups:" << endl;
-	cout << "-pi <pi> - Program indentification (int value 0-65535)" << endl;
+	cout << "-pi <pi> - Program identification (int value 0-65535)" << endl;
 	cout << "-pty <pty> - Program type (int value 0-31)" << endl << endl;
 
 	cout << "Group 0A-specific flags:" << endl;
